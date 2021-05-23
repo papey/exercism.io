@@ -1,0 +1,5 @@
+node_modules
+_build
+*.beam
+__pycache__
+metadata.json
