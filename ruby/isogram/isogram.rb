@@ -1,6 +1,6 @@
 module Isogram
   def self.isogram?(sentence)
-    sanitized = sentence.gsub(/[\s-]+/, '').downcase
-    sanitized.chars.uniq == sanitized.chars
+    sanitized = sentence.scan(/[\w+]/).map(&:downcase)
+    sanitized.uniq.length == sanitized.length
   end
 end
