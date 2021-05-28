@@ -6,4 +6,4 @@ proc isIsogram*(word : string): bool =
       if isAlphaAscii(x):
         x.toLowerAscii()
 
-  result = len(letters) == len(letters.deduplicate)
+  result = letters.len == letters.deduplicate.len
