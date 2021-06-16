@@ -23,9 +23,7 @@ impl<'a> HighScores<'a> {
     pub fn personal_top_three(&self) -> Vec<u32> {
         // acquire cloned mutable data to sort without modifying struct data
         let mut top = self.scores().to_vec();
-        // do sort
         top.sort_unstable();
-        // do reverse
         top.reverse();
         top.into_iter().take(3).collect()
     }
