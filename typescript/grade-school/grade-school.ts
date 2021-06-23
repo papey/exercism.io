@@ -1,5 +1,6 @@
 type Students = Map<string, string>;
 type Roster = Map<string, string[]>;
+
 export default class GradeSchool {
   private readonly students: Students = new Map();
 
