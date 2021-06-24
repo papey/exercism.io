@@ -8,7 +8,8 @@ defmodule Gigasecond do
           :calendar.datetime()
 
   def from(date) do
-    NaiveDateTime.from_erl!(date)
+    date
+    |> NaiveDateTime.from_erl!()
     |> NaiveDateTime.add(@gigasecond)
     |> NaiveDateTime.to_erl()
   end
