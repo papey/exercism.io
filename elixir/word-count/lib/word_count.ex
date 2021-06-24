@@ -8,8 +8,6 @@ defmodule WordCount do
   def count(sentence) do
     String.downcase(sentence)
     |> String.split(~r/[^[:alnum:]-]/u, trim: true)
-    |> Enum.reduce(%{}, fn elem, acc ->
-      Map.update(acc, elem, 1, &(&1 + 1))
-    end)
+    |> Enum.frequencies()
   end
 end
