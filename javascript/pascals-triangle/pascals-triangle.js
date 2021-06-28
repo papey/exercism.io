@@ -4,7 +4,7 @@ const buildRow = (fromRow = []) =>
     (_, i) => fromRow[i - 1] + fromRow[i] || 1
   );
 
-export const rows = (deepness, triangle = []) =>
-  deepness
-    ? rows(deepness - 1, [...triangle, buildRow(triangle[triangle.length - 1])])
+export const rows = (depth, triangle = []) =>
+  depth
+    ? rows(depth - 1, [...triangle, buildRow(triangle[triangle.length - 1])])
     : triangle;
