@@ -11,13 +11,13 @@ defmodule Hamming do
   def hamming_distance(strand1, strand2) when length(strand1) != length(strand2),
     do: {:error, "Lists must be the same length"}
 
-  def hamming_distance(strand1, strand2), do: do_hamming_distance(strand1, strand2, 0)
+  def hamming_distance(strand1, strand2), do: do_hamming_distance(Enum.zip(strand1, strand2), 0)
 
-  def do_hamming_distance([], [], diff), do: {:ok, diff}
+  def do_hamming_distance([], diff), do: {:ok, diff}
 
-  def do_hamming_distance([a | rest1], [a | rest2], diff),
-    do: do_hamming_distance(rest1, rest2, diff)
+  def do_hamming_distance([{a, a} | rest], diff),
+    do: do_hamming_distance(rest, diff)
 
-  def do_hamming_distance([_ | rest1], [_ | rest2], diff),
-    do: do_hamming_distance(rest1, rest2, diff + 1)
+  def do_hamming_distance([_ | rest], diff),
+    do: do_hamming_distance(rest, diff + 1)
 end
