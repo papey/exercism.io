@@ -13,11 +13,11 @@ defmodule Hamming do
 
   def hamming_distance(strand1, strand2), do: do_hamming_distance(Enum.zip(strand1, strand2), 0)
 
-  def do_hamming_distance([], diff), do: {:ok, diff}
+  defp do_hamming_distance([], diff), do: {:ok, diff}
 
-  def do_hamming_distance([{a, a} | rest], diff),
+  defp do_hamming_distance([{a, a} | rest], diff),
     do: do_hamming_distance(rest, diff)
 
-  def do_hamming_distance([_ | rest], diff),
+  defp do_hamming_distance([_ | rest], diff),
     do: do_hamming_distance(rest, diff + 1)
 end
