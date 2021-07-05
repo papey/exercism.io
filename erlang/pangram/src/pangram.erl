@@ -5,5 +5,4 @@
 -define(ALPHABET, "abcdefghijklmnopqrstuvwxyz").
 
 is_pangram(Sentence) ->
-  Sanitized = string:lowercase(Sentence),
-  length(?ALPHABET -- Sanitized) == 0.
+  [] == ?ALPHABET -- string:lowercase(Sentence).
