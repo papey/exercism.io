@@ -1,15 +1,13 @@
 from algorithm import sortedByIt
 from sequtils import mapIt, filterIt
 
-type Student = tuple[name: string, grade: int]
+type
+    Student = tuple[name: string, grade: int]
+    School* = object
+        students*: seq[Student]
 
 proc sort(students: seq[Student]): seq[Student] =
     students.sortedByIt((it.grade, it.name))
-
-
-type
-    School* = object
-        students*: seq[Student]
 
 proc roster*(school: School): seq[string] =
     school.students.sort.mapIt(it.name)
