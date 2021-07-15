@@ -7,11 +7,17 @@ fn is_factor(n: u32, factor: u32) -> bool {
 pub fn raindrops(n: u32) -> String {
     let sounds = DROPS
         .iter()
-        .filter(|(drop, _sound)| is_factor(n, *drop))
-        .fold(String::new(), |acc, (_drop, sound)| acc + sound);
+        .filter_map(|(drop, sound)| {
+            if is_factor(n, *drop) {
+                return Some(*sound);
+            }
+            None
+        })
+        .collect::<Vec<&str>>();
+
     if !sounds.is_empty() {
-        return sounds;
+        return sounds.join("");
     }
 
-    return n.to_string();
+    n.to_string()
 }
