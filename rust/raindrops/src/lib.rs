@@ -8,10 +8,10 @@ pub fn raindrops(n: u32) -> String {
     let sounds = DROPS
         .iter()
         .filter_map(|(drop, sound)| is_factor(n, *drop).then(|| *sound))
-        .collect::<Vec<&str>>();
+        .collect::<String>();
 
     if !sounds.is_empty() {
-        return sounds.join("");
+        return sounds;
     }
 
     n.to_string()
