@@ -18,7 +18,7 @@ module LuhnableString
       digits = id_number.chars.map(&:to_i).reverse
       digits.map.with_index do |digit, index|
         index.odd? ? multiply(digit) : digit
-      end.reduce(:+)
+      end.sum
     end
 
     def multiply(digit)
