@@ -13,13 +13,9 @@ def parse(markdown):
 
     result = []
     for line in markdown.split("\n"):
-        title = re.match(TITLE, line)
-        if title:
-            result.append(
-                "<h{level}>{content}</h{level}>".format(
-                    level=len(title.group(1)), content=title.group(2)
-                )
-            )
+        is_title, title = parse_heading(line)
+        if is_title:
+            result.append(title)
         elif line.startswith("* "):
             item = "<li>{item}</li>".format(item=line[2:])
             if result and result[-1] == CLOSING_LIST:
@@ -32,3 +28,13 @@ def parse(markdown):
             result.append("<p>{line}</p>".format(line=line))
 
     return "".join(result)
+
+
+def parse_heading(line):
+    title = re.match(TITLE, line)
+    if title:
+        return True, "<h{level}>{content}</h{level}>".format(
+            level=len(title.group(1)), content=title.group(2)
+        )
+
+    return False, ""
