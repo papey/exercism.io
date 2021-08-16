@@ -17,17 +17,11 @@ def parse(markdown):
         if is_title:
             result.append(title)
         elif line.startswith("* "):
-            item = "<li>{item}</li>".format(item=line[2:])
-            if result and result[-1] == CLOSING_LIST:
-                result[-1] = item
-            else:
-                result.append(OPENING_LIST)
-                result.append(item)
-            result.append(CLOSING_LIST)
+            result.append("<li>{item}</li>".format(item=line[2:]))
         else:
             result.append("<p>{line}</p>".format(line=line))
 
-    return "".join(result)
+    return re.sub(r"(<li>.*</li>)", r"<ul>\1</ul>", "".join(result))
 
 
 def parse_heading(line):
