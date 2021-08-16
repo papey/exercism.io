@@ -4,21 +4,28 @@ export default class Clock {
   private total: number;
 
   constructor(hours: number, mins: number = 0) {
-    this.total =
-      (((mins + hours * this.minsPerHour) % this.minsPerDay) +
-        this.minsPerDay) %
-      this.minsPerDay;
+    this.total = this.normalize(hours, mins);
   }
 
-  plus = (mins: number): Clock => new Clock(0, this.total + mins);
+  plus = (mins: number): Clock => {
+    this.total = this.normalize(0, this.total + mins);
+    return this;
+  };
 
-  minus = (mins: number): Clock => new Clock(0, this.total - mins);
+  minus = (mins: number): Clock => {
+    this.total = this.normalize(0, this.total - mins);
+    return this;
+  };
 
   equals = (c: Clock): boolean => this.total === c.total;
 
-  getMinutes = (): number => this.total % this.minsPerHour;
+  private normalize = (hours: number, mins: number): number =>
+    (((mins + hours * this.minsPerHour) % this.minsPerDay) + this.minsPerDay) %
+    this.minsPerDay;
 
-  getHours = (): number => Math.floor(this.total / 60);
+  private getMinutes = (): number => this.total % this.minsPerHour;
+
+  private getHours = (): number => Math.floor(this.total / 60);
 
   private format = (n: number): string => n.toString().padStart(2, "0");
 
