@@ -1,58 +1,39 @@
 export class LinkedList {
   constructor() {
+    this._len = 0;
     this.head = null;
+    this.tail = null;
   }
 
   push(value) {
-    // create the node value
     const n = new Node(value);
 
-    // if there is no head, use the fresh node as head
-    if (this.head == null) {
+    if (!this._len) {
       this.head = n;
+      this.tail = n;
+      this._len++;
       return;
     }
 
-    // if there is a head
-    let h = this.head;
-    // go to the tail
-    while (h.next) {
-      h = h.next;
-    }
-
-    // set next to new node to create the new tail
-    h.next = n;
+    this.tail.next = n;
+    n.prev = this.tail;
+    this.tail = n;
+    this._len++;
   }
 
   pop() {
-    // if head is tail, remove it and set it to null
-    if (this.head.next == null) {
-      const n = this.head;
-      this.head = null;
-      return n.value;
-    }
+    const n = this.tail;
+    this.tail = this.tail.prev;
+    this._len--;
 
-    // point to the head
-    let h = this.head;
-    // loop over list elements
-    while (h.next) {
-      // if the current node is the end of the tail
-      if (h.next.next == null) {
-        // save it
-        const n = h.next;
-        // remove it by cutting the link
-        h.next = null;
-
-        return n.value;
-      }
-      // go forward in the list
-      h = h.next;
-    }
+    return n.value;
   }
 
   shift() {
     const n = this.head;
     this.head = n.next;
+    this._len--;
+
     return n.value;
   }
 
@@ -60,53 +41,47 @@ export class LinkedList {
     const n = new Node(value);
     n.next = this.head;
     this.head = n;
+    this._len++;
   }
 
   delete(value) {
-    // do not delete if no head
-    if (this.head == null) {
-      return;
-    }
-
     // if head if the value, remove it
     if (this.head.value == value) {
-      this.head = this.head.next;
+      this.shift();
       return;
     }
 
-    let h = this.head;
+    // if tail is the value, remove it
+    if (this.tail.value == value) {
+      this.pop();
+      return;
+    }
 
-    while (h.next) {
-      if (h.next && h.next.value == value) {
-        h.next = h.next.next
+    let current = this.head;
+
+    while (current.next) {
+      if (current.next && current.next.value == value) {
+        current.next = current.next.next;
+        if (current.next) {
+          current.next.prev = current;
+        }
+        this._len--;
         return;
       }
-      h = h.next;
+      current = current.next;
     }
 
   }
 
   count() {
-    // if no head, len is 0
-    if (this.head == null) {
-      return 0;
-    }
-
-    let len = 1;
-    let h = this.head;
-    // go to the tail, count every move forward
-    while (h.next) {
-      len++;
-      h = h.next;
-    }
-
-    return len;
+    return this._len;
   }
 }
 
 class Node {
   constructor(value) {
     this.value = value;
+    this.prev = null;
     this.next = null;
   }
 }
