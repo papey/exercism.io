@@ -1,87 +1,58 @@
 export class LinkedList {
   constructor() {
     this._len = 0;
-    this.reset();
+    // _fakeHead and _fakeTail are fictive and just ensure operations are always done in the "middle" of the list
+    this._fakeHead = new Node()
+    this._fakeTail = new Node(undefined, this._fakeHead)
+    this._fakeHead.next = this._fakeTail
   }
 
-  push(value) {
-    const n = new Node(value);
+  get head() { return this._fakeHead.next }
 
-    if (!this._len) {
-      this.head = this.tail = n;
-      this._len++;
-      return;
-    }
+  get tail() { return this._fakeTail.prev }
 
-    this.tail.next = n;
-    n.prev = this.tail;
-    this.tail = n;
+  unshift = (value) => { this.insert(value, this._fakeHead, this.head) }
+
+  push = (value) => { this.insert(value, this.tail, this._fakeTail) }
+
+  pop = () => { return this.remove(this.tail).value; }
+
+  shift = () => { return this.remove(this.head).value; }
+
+  delete = (value) => {
+    const node = this.findNode(value);
+    if (node) return this.remove(node)
+  }
+
+  remove(node) {
+    node.next.prev = node.prev
+    node.prev.next = node.next
+    this._len--;
+    return node
+  }
+
+  insert(value, prev, next) {
+    const node = new Node(value, prev, next);
+    prev.next = next.prev = node;
     this._len++;
   }
 
-  pop = () => { return this.remove(this.tail) }
+  count = () => { return this._len }
 
-  shift = () => { return this.remove(this.head) }
-
-  unshift(value) {
-    const n = new Node(value);
-    n.next = this.head;
-    this.head = n;
-    this._len++;
-  }
-
-  delete(value) {
+  findNode(value) {
     let current = this.head;
     while (current && current.value != value) {
       current = current.next;
     }
 
-    if (!current) {
-      return;
-    }
-
-    return this.remove(current);
-  }
-
-  remove(node) {
-    this._len--;
-    if (this._len == 0) {
-      this.reset();
-    }
-
-    if (node == this.head) {
-      this.head = this.head.next;
-      this.head.prev = null;
-    }
-
-    if (node == this.tail) {
-      this.tail = this.tail.prev;
-      this.tail.next = null;
-    }
-
-    if (node.prev) {
-      node.prev.next = node.next;
-    }
-
-    if (node.next) {
-      node.next.prev = node.prev;
-    }
-
-    return node.value;
-  }
-
-  count() {
-    return this._len;
-  }
-
-  reset() {
-    this.head = this.tail = null;
+    return current
   }
 }
 
 class Node {
-  constructor(value) {
+  constructor(value = undefined, prev = null, next = null) {
     this.value = value;
-    this.prev = this.next = null;
+    this.prev = prev;
+    this.next = next;
   }
 }
