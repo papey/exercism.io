@@ -1,5 +1,10 @@
 module LuhnableString
   refine String do
+    def valid_luhn?
+      id_number = gsub(/\s+/, '')
+      valid_length?(id_number) && digits_only?(id_number) && valid_sum?(id_number)
+    end
+
     private
 
     def valid_length?(id_number)
@@ -24,13 +29,6 @@ module LuhnableString
     def multiply(digit)
       value = digit * 2
       value > 9 ? value - 9 : value
-    end
-
-    public
-
-    def valid_luhn?
-      id_number = gsub(/\s+/, '')
-      valid_length?(id_number) && digits_only?(id_number) && valid_sum?(id_number)
     end
   end
 end
