@@ -8,18 +8,21 @@ export class GradeSchool {
   };
 
   add(name, grade) {
-    Object.entries(this._db).forEach(([grade, students]) => {
-      if (students.includes(name))
-        this._db[grade].splice(students.indexOf(name));
-    });
-
+    this.removeDuplicates(name);
     this._db[grade] = this._db[grade] || [];
     this._db[grade].push(name);
     this._db[grade].sort();
   }
 
+  removeDuplicates(name) {
+    Object.entries(this._db).forEach(([grade, students]) => {
+      if (students.includes(name))
+        this._db[grade].splice(students.indexOf(name));
+    });
+  }
+
   grade(grade) {
-    return Array.from(this._db[grade] || []);
+    return this.copy(this._db[grade] || []);
   }
 
   copy = (data) => {
