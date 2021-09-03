@@ -12,14 +12,6 @@ class Clock
     @minutes = ((minutes % MINUTES_PER_DAY) + MINUTES_PER_DAY) % MINUTES_PER_DAY
   end
 
-  def hour
-    minutes / MINUTES_PER_HOUR
-  end
-
-  def minute
-    minutes % MINUTES_PER_HOUR
-  end
-
   def +(other)
     Clock.new(hour: 0, minute: minutes + other.minutes)
   end
@@ -28,11 +20,19 @@ class Clock
     Clock.new(hour: 0, minute: minutes - other.minutes)
   end
 
+  def eql?(other)
+    hash == other.hash
+  end
+
+  def hash
+    minutes.hash
+  end
+
   def ==(other)
     minutes == other.minutes
   end
 
   def to_s
-    "#{'%02d' % hour}:#{'%02d' % minute}"
+    format('%02d:%02d', *minutes.divmod(MINUTES_PER_HOUR))
   end
 end
