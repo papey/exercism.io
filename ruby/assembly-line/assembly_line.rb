@@ -3,7 +3,11 @@ class AssemblyLine
 
   MINUTES_PER_HOUR = 60
   CARS_PER_HOUR = 221
-  SUCCESS_RATES = { 1..4 => 1, 5..8 => 0.9, 9 => 0.8, 10 => 0.77 }.freeze
+  SUCCESS_RATES = {
+    1..4 => 1,
+    5..8 => 0.9,
+    9 => 0.8, 10 => 0.77
+  }.freeze
 
   def initialize(speed)
     @speed = speed
