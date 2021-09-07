@@ -1,16 +1,10 @@
 class BoutiqueInventory
-  CHEAP = 30
-
-  def initialize(items)
-    @items = items
-  end
-
   def item_names
-    items.map { |item| item[:name] }.sort
+    items.sort_by { |item| item[:name] }.collect { |item| item[:name] }
   end
 
   def cheap
-    items.select { |item| item[:price] < 30 }
+    items.select { |item| item[:price] < CHEAP }
   end
 
   def out_of_stock
@@ -22,10 +16,16 @@ class BoutiqueInventory
   end
 
   def total_stock
-    items.reduce(0) { |sum, item| sum + item[:quantity_by_size].values.sum }
+    items.sum { |item| item[:quantity_by_size].values.sum }
   end
 
   private
 
+  CHEAP = 30
+
   attr_reader :items
+
+  def initialize(items)
+    @items = items
+  end
 end
