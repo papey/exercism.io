@@ -1,6 +1,19 @@
 class BoutiqueInventory
+  CHEAP = 30
+  private_constant :CHEAP
+
+  private
+
+  attr_reader :items
+
+  def initialize(items)
+    @items = items
+  end
+
+  public
+
   def item_names
-    items.sort_by { |item| item[:name] }.collect { |item| item[:name] }
+    items.collect { |item| item[:name] }.sort
   end
 
   def cheap
@@ -17,15 +30,5 @@ class BoutiqueInventory
 
   def total_stock
     items.sum { |item| item[:quantity_by_size].values.sum }
-  end
-
-  private
-
-  CHEAP = 30
-
-  attr_reader :items
-
-  def initialize(items)
-    @items = items
   end
 end
