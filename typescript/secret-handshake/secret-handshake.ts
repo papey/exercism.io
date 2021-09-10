@@ -11,10 +11,7 @@ class Enumerable<T> {
     this.iterable = iterable;
   }
 
-  reduce(
-    callback: (acc: string[], action: T) => string[],
-    init: string[]
-  ): string[] {
+  reduce<U>(callback: (acc: U, action: T) => U, init: U): U {
     let res = init;
 
     for (let elem of this.iterable) res = callback(res, elem);
