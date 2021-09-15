@@ -10,10 +10,7 @@ func isPaired*(sentence : string) : bool =
         if matching.hasKey(c):
             stack.add(c)
 
-        if c in closing:
-            if stack.len == 0:
-                return false
-            if c != matching[stack.pop()]:
-                return false
+        if c in closing and (stack.len == 0 or c != matching[stack.pop()]):
+            return false
 
     stack.len == 0
