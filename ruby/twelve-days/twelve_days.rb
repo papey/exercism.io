@@ -1,41 +1,36 @@
 module TwelveDays
-  DAYS = %w[
-    first
-    second
-    third
-    fourth
-    fifth
-    sixth
-    seventh
-    eighth
-    ninth
-    tenth
-    eleventh
-    twelfth
-  ]
+  TEMPLATE = "On the %s day of Christmas my true love gave to me: %s\n".freeze
 
-  GIFTS = [
-    'twelve Drummers Drumming, ',
-    'eleven Pipers Piping, ',
-    'ten Lords-a-Leaping, ',
-    'nine Ladies Dancing, ',
-    'eight Maids-a-Milking, ',
-    'seven Swans-a-Swimming, ',
-    'six Geese-a-Laying, ',
-    'five Gold Rings, ',
-    'four Calling Birds, ',
-    'three French Hens, ',
-    'two Turtle Doves, and ',
-    'a Partridge in a Pear Tree.'
-  ]
+  VERSES_MAP = {
+    1 => { day: 'first', item: 'a Partridge in a Pear Tree.' },
+    2 => { day: 'second', item: 'two Turtle Doves, and ' },
+    3 => { day: 'third', item: 'three French Hens, ' },
+    4 => { day: 'fourth', item: 'four Calling Birds, ' },
+    5 => { day: 'fifth', item: 'five Gold Rings, ' },
+    6 => { day: 'sixth', item: 'six Geese-a-Laying, ' },
+    7 => { day: 'seventh', item: 'seven Swans-a-Swimming, ' },
+    8 => { day: 'eighth', item: 'eight Maids-a-Milking, ' },
+    9 => { day: 'ninth', item: 'nine Ladies Dancing, ' },
+    10 => { day: 'tenth', item: 'ten Lords-a-Leaping, ' },
+    11 => { day: 'eleventh', item: 'eleven Pipers Piping, ' },
+    12 => { day: 'twelfth', item: 'twelve Drummers Drumming, ' }
+  }
 
-  private_constant :DAYS, :GIFTS
+  private_constant :VERSES_MAP, :TEMPLATE
 
-  def self.song
-    "#{(1..DAYS.length).map { |index| verse(index) }.join("\n\n")}\n"
+  def self.verse(index)
+    format(TEMPLATE, day(index), items(index))
   end
 
-  def self.verse(verse_index)
-    "On the #{DAYS[verse_index - 1]} day of Christmas my true love gave to me: #{GIFTS.last(verse_index).join}"
+  def self.day(index)
+    VERSES_MAP[index][:day]
+  end
+
+  def self.items(index)
+    (1..index).reverse_each.sum('') { |i| VERSES_MAP[i][:item] }
+  end
+
+  def self.song
+    (1..12).map { |i| verse(i) }.join("\n")
   end
 end
