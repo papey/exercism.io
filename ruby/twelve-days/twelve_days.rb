@@ -1,5 +1,5 @@
 class TwelveDays
-  TEMPLATE = "On the %<day>s day of Christmas my true love gave to me: %<items>s\n".freeze
+  TEMPLATE = 'On the %<day>s day of Christmas my true love gave to me: %<items>s'.freeze
 
   # VDI stands for Verses to day and item
   VDI = {
@@ -40,6 +40,11 @@ class TwelveDays
   public
 
   def to_s
-    VDI.keys.sum('') { |i| '%<line>s%<cr>s' % { line: verse(i), cr: i == VDI.size ? '' : "\n" } }
+    VDI.keys.sum('') do |i|
+      '%<line>s%<cr>s' % {
+        line: verse(i),
+        cr: ("\n" * (i == VDI.size ? 1 : 2))
+      }
+    end
   end
 end
