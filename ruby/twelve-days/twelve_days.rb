@@ -26,7 +26,7 @@ class TwelveDays
   private
 
   def verse(index)
-    TEMPLATE % { day: VDI[index][:day], items: items(index) } # rubocop:disable Style/FormatString
+    TEMPLATE % { day: VDI[index][:day], items: items(index) }
   end
 
   def day(index)
@@ -34,12 +34,12 @@ class TwelveDays
   end
 
   def items(index)
-    (1..index).reverse_each.sum('') { |i| "#{VDI[i][:item]}#{VDI[i][:extra] || ''}" }
+    (1..index).reverse_each.sum('') { |i| '%<item>s%<extra>s' % { item: VDI[i][:item], extra: VDI[i][:extra] || '' } }
   end
 
   public
 
   def to_s
-    VDI.keys.map { |i| verse(i) }.join("\n")
+    VDI.keys.sum('') { |i| '%<line>s%<cr>s' % { line: verse(i), cr: i == VDI.size ? '' : "\n" } }
   end
 end
