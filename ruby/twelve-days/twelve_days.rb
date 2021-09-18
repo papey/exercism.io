@@ -1,5 +1,5 @@
-module TwelveDays
-  TEMPLATE = "On the %s day of Christmas my true love gave to me: %s\n".freeze
+class TwelveDays
+  TEMPLATE = "On the %<day>s day of Christmas my true love gave to me: %<items>s\n".freeze
 
   # VDI stands for Verses to day and item
   VDI = {
@@ -19,19 +19,27 @@ module TwelveDays
 
   private_constant :VDI, :TEMPLATE
 
-  def self.verse(index)
-    format(TEMPLATE, day(index), items(index))
+  def self.song
+    new.to_s
   end
 
-  def self.day(index)
+  private
+
+  def verse(index)
+    TEMPLATE % { day: VDI[index][:day], items: items(index) } # rubocop:disable Style/FormatString
+  end
+
+  def day(index)
     VDI[index][:day]
   end
 
-  def self.items(index)
+  def items(index)
     (1..index).reverse_each.sum('') { |i| "#{VDI[i][:item]}#{VDI[i][:extra] || ''}" }
   end
 
-  def self.song
-    (1..VDI.size).map { |i| verse(i) }.join("\n")
+  public
+
+  def to_s
+    VDI.keys.map { |i| verse(i) }.join("\n")
   end
 end
