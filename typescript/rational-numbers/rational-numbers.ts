@@ -11,6 +11,9 @@ export class Rational {
   den: number;
 
   constructor(numerator: number, denominator: number) {
+    if (denominator == 0) {
+      throw "Denominator value must be != 0";
+    }
     this.num = numerator;
     this.den = denominator;
     this.reduce();
