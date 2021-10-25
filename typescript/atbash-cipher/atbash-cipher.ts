@@ -1,45 +1,38 @@
-// Add simple chunk method to array interface
-declare global {
-  interface Array<T> {
-    chunk(size: number): T[];
-  }
-}
+const ENCODE_SIZE = 5;
 
-// Implement the chunk function for any kind of array
-Array.prototype.chunk = function chunk<T>(this: T[], size: number): T[] {
-  let tmp = new Array();
-
-  for (let i = 0, j = this.length; i < j; i += size)
-    tmp.push(this.slice(i, i + size).join(""));
-
-  return tmp;
-};
-
-const ALPHA: string[] = Array.from("abcdefghijklmnopqrstuvwxyz");
-const REVERSE_ALPHA: string[] = Array.from(ALPHA).reverse();
-
-const ENCODE_SIZE: number = 5;
+const A = "a".charCodeAt(0);
+const Z = "z".charCodeAt(0);
+const SHIFT = A + Z;
 
 export function encode(plainText: string): string {
-  return convert(plainText, ALPHA, REVERSE_ALPHA).chunk(ENCODE_SIZE).join(" ");
+  return chunk(convert(plainText), ENCODE_SIZE).join(" ");
 }
 
 export function decode(cipherText: string): string {
-  return convert(cipherText, REVERSE_ALPHA, ALPHA).join("");
+  return convert(cipherText).join("");
 }
 
-function convert(text: string, from: string[], to: string[]): string[] {
+function convert(text: string): string[] {
   return normalize(text)
     .split("")
     .map((letter) => {
-      const index = from.indexOf(letter);
-      if (index === -1) {
+      const code = letter.charCodeAt(0);
+      if (code < A || code > Z) {
         return letter;
       }
-      return to[index];
+      return String.fromCharCode(SHIFT - code);
     });
 }
 
 function normalize(text: string): string {
   return text.toLocaleLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
+function chunk<T>(array: T[], size: number): T[] {
+  let tmp = new Array();
+
+  for (let i = 0, j = array.length; i < j; i += size)
+    tmp.push(array.slice(i, i + size).join(""));
+
+  return tmp;
 }

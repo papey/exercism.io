@@ -43,7 +43,7 @@ describe('AtbashCipher', () => {
     })
   })
 
-  xdescribe('decode', () => {
+  describe('decode', () => {
     it('decode exercism', () => {
       const plainText = decode('vcvix rhn')
       expect(plainText).toEqual('exercism')
