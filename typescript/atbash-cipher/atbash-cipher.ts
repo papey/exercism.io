@@ -28,8 +28,8 @@ function normalize(text: string): string {
   return text.toLocaleLowerCase().replace(/[^a-z0-9]/g, "");
 }
 
-function chunk<T>(array: T[], size: number): T[] {
-  let tmp = new Array();
+function chunk<T>(array: T[], size: number): string[] {
+  let tmp: string[] = new Array();
 
   for (let i = 0, j = array.length; i < j; i += size)
     tmp.push(array.slice(i, i + size).join(""));
