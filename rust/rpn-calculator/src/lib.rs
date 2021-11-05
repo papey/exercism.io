@@ -43,5 +43,5 @@ pub fn evaluate(inputs: &[CalculatorInput]) -> Option<i32> {
 pub fn pop_operands(stack: &mut Vec<i32>) -> Option<(i32, i32)> {
     let o1 = stack.pop()?;
     let o2 = stack.pop()?;
-    return Some((o2, o1));
+    Some((o2, o1))
 }
