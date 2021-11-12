@@ -6,26 +6,20 @@ class Triangle
   end
 
   def valid?
-    return false if @sides.any?(&:zero?)
+    return false if @sides.any? { |s| s.zero? }
 
     @sides.permutation(3).all? { |(a, b, c)| a <= b + c }
   end
 
   def equilateral?
-    return false unless valid?
-
-    @sides.uniq.length == 1
+    valid? &&@sides.uniq.length == 1
   end
 
   def isosceles?
-    return false unless valid?
-
-    @sides.uniq.length <= 2
+    valid? && @sides.uniq.length <= 2
   end
 
   def scalene?
-    return false unless valid?
-
-    @sides.uniq.length == 3
+    valid? && @sides.uniq.length == 3
   end
 end
