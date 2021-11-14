@@ -5,14 +5,7 @@ class Anagram
   end
 
   def match(candidates)
-    candidates.select do |candidate|
-      next if candidate.length != @base.length
-
-      downcased_candidate = candidate.downcase
-
-      next if downcased_candidate == @base
-
-      @letters == downcased_candidate.chars.sort
-    end
+    candidates.reject { |candidate| candidate.downcase == @base || candidate.length != @base.length }
+              .select { |candidate| @letters == candidate.downcase.chars.sort }
   end
 end
