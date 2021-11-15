@@ -1,13 +1,19 @@
 class Anagram
-  attr_reader :base, :letters
+  private
+
+  attr_reader :is_anagram, :is_same_word
 
   def initialize(word)
-    @base = word.downcase
-    @letters = @base.chars.sort
+    base = word.downcase
+    letters = base.chars.sort
+    @is_same_word = ->(candidate) { candidate.downcase == base }
+    @is_anagram = ->(candidate) { letters == candidate.downcase.chars.sort }
   end
 
+  public
+
   def match(candidates)
-    candidates.reject { |candidate| candidate.downcase == base }
-              .select { |candidate| letters == candidate.downcase.chars.sort }
+    candidates.reject(&is_same_word)
+              .select(&is_anagram)
   end
 end
