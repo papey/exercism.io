@@ -1,6 +1,8 @@
 import sequtils, intsets
 
-proc isValid(sides : array[3, int]) : bool =
+type Triangle = array[3, int]
+
+proc isValid(sides : Triangle) : bool =
     if sides.anyIt(it <= 0):
         return false
 
@@ -10,18 +12,11 @@ proc isValid(sides : array[3, int]) : bool =
 
     result = a <= b + c and b <= a + c and c <= a + b
 
-proc toSet(sides: array[3, int]) : IntSet =
-    var uniqSides = initIntSet()
-    for s in sides:
-        uniqSides.incl(s)
+proc isEquilateral*(sides : Triangle) : bool =
+    result = isValid(sides) and sides.toIntSet.len == 1
 
-    result = uniqSides
+proc isIsosceles*(sides : Triangle) : bool =
+    result = isValid(sides) and sides.toIntSet.len <= 2
 
-proc isEquilateral*(sides : array[3, int]) : bool =
-    result = isValid(sides) and toSet(sides).len == 1
-
-proc isIsosceles*(sides : array[3, int]) : bool =
-    result = isValid(sides) and toSet(sides).len <= 2
-
-proc isScalene*(sides : array[3, int]) : bool =
-    result = isValid(sides) and toSet(sides).len == 3
+proc isScalene*(sides : Triangle) : bool =
+    result = isValid(sides) and sides.toIntSet.len == 3
