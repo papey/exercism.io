@@ -1,19 +1,19 @@
 class SumOfMultiples
   private
 
-  attr_reader :factors
+  attr_reader :multiples
 
-  def initialize(*factors)
-    @factors = factors
+  def initialize(*multiples)
+    @multiples = multiples
   end
 
   def multiples?(number)
-    @factors.any? { |f| number.modulo(f).zero? }
+    multiples.any? { |multiple| number.modulo(multiple).zero? }
   end
 
   public
 
   def to(number)
-    (1..number - 1).filter { |candidate| multiples?(candidate) }.sum
+    (1..number - 1).sum { |candidate| multiples?(candidate) ? candidate : 0 }
   end
 end
