@@ -14,6 +14,6 @@ class SumOfMultiples
   public
 
   def to(number)
-    (1..number - 1).sum { |candidate| multiples?(candidate) ? candidate : 0 }
+    (1...number).sum { |candidate| multiples?(candidate) ? candidate : 0 }
   end
 end
