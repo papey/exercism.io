@@ -7,61 +7,58 @@ class Tournament
     public function tally($scores)
     {
         $raw_results = explode("\n", $scores);
-        $results = array_reduce($raw_results, 'reduce_results', array());
-        usort($results, 'sort_results');
-        return array_reduce($results, 'pretty_print', TABLE_HEADER);
-    }
-}
-
-function pretty_print($acc, $result)
-{
-    return $acc . "\n" . $result->pp();
-}
-
-function sort_results($a, $b)
-{
-    if ($a->p == $b->p) {
-        return $a->name < $b->name ? -1 : 1;
+        $results = array_reduce($raw_results, array($this, 'parse_result'), array());
+        usort($results, array($this, 'sort_results'));
+        return array_reduce($results, function ($acc, $result) {
+            return $acc . "\n" . $result->pp();
+        }, TABLE_HEADER);
     }
 
-    return $a->p < $b->p ? 1 : -1;
-}
+    private function sort_results($a, $b)
+    {
+        if ($a->p == $b->p) {
+            return $a->name < $b->name ? -1 : 1;
+        }
 
-function reduce_results($teams, $result)
-{
-    trim($result);
-    if ($result == "") {
+        return $a->p < $b->p ? 1 : -1;
+    }
+
+    private function parse_result($teams, $result)
+    {
+        trim($result);
+        if ($result == "") {
+            return $teams;
+        }
+
+        $parts = explode(";", $result);
+        $t1_name = $parts[0];
+        $t2_name = $parts[1];
+        $outcome = $parts[2];
+
+        $t1 = $teams[$t1_name] ?? new TeamResult($t1_name);
+        $t2 = $teams[$t2_name] ?? new TeamResult($t2_name);
+
+        switch ($outcome) {
+            case 'win':
+                $t1->add_win();
+                $t2->add_loss();
+                break;
+
+            case 'loss':
+                $t1->add_loss();
+                $t2->add_win();
+                break;
+
+            default:
+                $t1->add_draw();
+                $t2->add_draw();
+        }
+
+        $teams[$t1->name] = $t1;
+        $teams[$t2->name] = $t2;
+
         return $teams;
     }
-
-    $parts = explode(";", $result);
-    $t1_name = $parts[0];
-    $t2_name = $parts[1];
-    $outcome = $parts[2];
-
-    $t1 = $teams[$t1_name] ?? new TeamResult($t1_name);
-    $t2 = $teams[$t2_name] ?? new TeamResult($t2_name);
-
-    switch ($outcome) {
-        case 'win':
-            $t1->add_win();
-            $t2->add_loss();
-            break;
-
-        case 'loss':
-            $t1->add_loss();
-            $t2->add_win();
-            break;
-
-        default:
-            $t1->add_draw();
-            $t2->add_draw();
-    }
-
-    $teams[$t1->name] = $t1;
-    $teams[$t2->name] = $t2;
-
-    return $teams;
 }
 
 class TeamResult
