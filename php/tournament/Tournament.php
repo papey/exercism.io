@@ -1,26 +1,24 @@
 <?php
 
-define('TABLE_HEADER', "Team                           | MP |  W |  D |  L |  P");
 
 class Tournament
 {
+    const TABLE_HEADER = "Team                           | MP |  W |  D |  L |  P";
+
     public function tally($scores)
     {
-        $raw_results = explode("\n", $scores);
+        $raw_results = preg_split("/(\r\n|\n|\r)/", $scores);
         $results = array_reduce($raw_results, array($this, 'parse_result'), array());
-        usort($results, array($this, 'sort_results'));
+        usort($results, function ($a, $b) {
+            if ($a->p == $b->p) {
+                return $a->name < $b->name ? -1 : 1;
+            }
+
+            return $a->p < $b->p ? 1 : -1;
+        });
         return array_reduce($results, function ($acc, $result) {
             return $acc . "\n" . $result->pp();
-        }, TABLE_HEADER);
-    }
-
-    private function sort_results($a, $b)
-    {
-        if ($a->p == $b->p) {
-            return $a->name < $b->name ? -1 : 1;
-        }
-
-        return $a->p < $b->p ? 1 : -1;
+        }, Tournament::TABLE_HEADER);
     }
 
     private function parse_result($teams, $result)
@@ -63,6 +61,7 @@ class Tournament
 
 class TeamResult
 {
+
     public function __construct($name)
     {
         $this->name = $name;
