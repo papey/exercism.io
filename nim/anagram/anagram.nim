@@ -1,4 +1,4 @@
-import sequtils, algorithm, strutils
+import std/[sequtils, algorithm, strutils]
 
 proc detectAnagrams*(word: string, candidates: seq[string]): seq[string] =
     let
