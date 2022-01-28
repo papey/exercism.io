@@ -6,14 +6,10 @@ class Node(T)
   @left : self?
   @right : self?
 
-  getter value
-  getter left
-  getter right
+  getter value : T
+  getter left, right : self?
 
-  def initialize(val : T)
-    @value = val
-    @left = nil
-    @right = nil
+  def initialize(@value : T, @left = nil, @right = nil)
   end
 
   def leftmost
@@ -56,19 +52,21 @@ class Node(T)
     end
   end
 
-  def values : Array(Int32)
-    vals = [] of Int32
-    if left = @left
-      vals += left.values
+  def traverse(acc = [] of Node(T))
+    left.try &.traverse(acc)
+    acc << self
+    right.try &.traverse(acc)
+    acc
+  end
+
+  def each(&block)
+    traverse.each do |v|
+      yield v.value
     end
+  end
 
-    vals += [@value]
-
-    if right = @right
-      vals += right.values
-    end
-
-    vals
+  def each
+    traverse.each.map(&.value)
   end
 
   def search(val : T) : self | Nil
@@ -81,35 +79,7 @@ class Node(T)
     end
   end
 
-  def each(&block : Int32 -> _)
-    values().each do |v|
-      yield v
-    end
-  end
-
-  def each : TreeIterator
-    TreeIterator.new(to_a)
-  end
-
   private def insert_create(child : self?, val : T) : self
     child ? child.insert(val) : Node.new(val)
-  end
-end
-
-class TreeIterator
-  include Iterator(Int32)
-
-  def initialize(@values : Array(Int32))
-    @index = -1
-  end
-
-  def next : (Int32 | Iterator::Stop)
-    @index += 1
-    @index < @values.size ? @values[@index] : stop
-  end
-
-  def rewind
-    @index = 0
-    self
   end
 end
