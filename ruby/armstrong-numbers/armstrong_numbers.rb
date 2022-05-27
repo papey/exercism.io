@@ -3,7 +3,6 @@
 module ArmstrongNumbers
   def self.include?(number)
     digits = number.digits
-    n_digits = digits.length
-    number == digits.sum { |digit| digit**n_digits }
+    number == digits.sum { |digit| digit**digits.length }
   end
 end
