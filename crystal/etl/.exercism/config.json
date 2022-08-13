@@ -1,0 +1,19 @@
+{
+  "blurb": "We are going to do the `Transform` step of an Extract-Transform-Load.",
+  "authors": [
+    "amscotti"
+  ],
+  "files": {
+    "solution": [
+      "src/etl.cr"
+    ],
+    "test": [
+      "spec/etl_spec.cr"
+    ],
+    "example": [
+      ".meta/src/example.cr"
+    ]
+  },
+  "source": "The Jumpstart Lab team",
+  "source_url": "http://jumpstartlab.com"
+}
