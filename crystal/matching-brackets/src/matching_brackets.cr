@@ -2,15 +2,13 @@ module MatchingBrackets
   MATCHING = {'{' => '}', '[' => ']', '(' => ')'}
   CLOSING  = MATCHING.values
 
-  def self.valid?(sentence : String) : Bool
+  def self.valid?(sentence)
     return true if sentence.empty?
 
     stack = [] of Char
 
     sentence.chars.each do |ch|
-      if MATCHING.keys.includes?(ch)
-        stack << ch
-      end
+      stack << ch if MATCHING.keys.includes?(ch)
 
       return false if CLOSING.includes?(ch) && (stack.empty? || ch != MATCHING[stack.pop])
     end
