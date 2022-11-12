@@ -14,27 +14,18 @@ lazy_static! {
     };
 }
 
-static OPENING_BRACKETS: [char; 3] = ['[', '{', '('];
-
 pub fn brackets_are_balanced(string: &str) -> bool {
     let mut stack: Vec<char> = vec![];
 
     for ch in string.chars() {
-        if OPENING_BRACKETS.contains(&ch) {
+        if None != MATCHING_BRACKETS.values().find(|&&c| c == ch) {
             stack.push(ch);
-            continue;
-        }
-
-        if MATCHING_BRACKETS.contains_key(&ch) {
-            if let Some(opening) = stack.pop() {
-                if opening == MATCHING_BRACKETS[&ch] {
-                    continue;
-                }
+        } else if let Some(&c) = MATCHING_BRACKETS.get(&ch) {
+            if Some(c) != stack.pop() {
+                return false;
             }
-
-            return false;
         }
     }
 
-    stack.len() == 0
+    stack.is_empty()
 }
